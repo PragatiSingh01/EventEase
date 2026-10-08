@@ -1,0 +1,15 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+<section class="dashboard-section form-card">
+    <span class="section-label">DELETE PARTICIPANT</span>
+    <h2>Remove {{ registration.full_name }}?</h2>
+    <p>This will delete the participant from the event registration list.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="main-btn danger-btn">Confirm Delete</button>
+        <a href="{% url 'registrations_list' %}" class="text-btn">Cancel</a>
+    </form>
+</section>
+{% endblock %}

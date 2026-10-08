@@ -1,0 +1,15 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+<section class="dashboard-section form-card">
+    <span class="section-label">{{ title }}</span>
+    <h2>{{ title }}</h2>
+
+    <form method="post" class="crud-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="main-btn">Save</button>
+        <a href="{% url 'event_list' %}" class="text-btn">Cancel</a>
+    </form>
+</section>
+{% endblock %}

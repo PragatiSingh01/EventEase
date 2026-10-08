@@ -1,0 +1,238 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventEase | College Events</title>
+    <link rel="stylesheet" href="{% static 'events/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="logo">Event<span>Ease</span></div>
+        <ul class="nav-links">
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#events">Events</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#register" class="nav-register">Register</a></li>
+            <li><a href="{% url 'event_list' %}">Manage</a></li>
+        </ul>
+        <div class="menu-icon" onclick="toggleMenu()">☰</div>
+    </nav>
+</header>
+
+<main>
+    <section id="home" class="hero">
+        <div class="hero-left">
+            <h1>Something exciting is always happening <span>on campus.</span></h1>
+            <p>Find college events, register for activities, and be part of what is happening around you.</p>
+            <div class="hero-buttons">
+                <a href="#events" class="main-btn">Explore Events</a>
+                <a href="#register" class="text-btn">Register for an event →</a>
+            </div>
+        </div>
+
+        <div class="notice-board">
+            <div class="board-top">
+                <span>THIS WEEK</span>
+                <span class="dot"></span>
+            </div>
+            <h3>What's happening?</h3>
+
+            {% for event in events|slice:':3' %}
+            <div class="mini-event">
+                <div class="date-box {% if event.category == 'cultural' %}pink{% elif event.category == 'sports' %}green{% endif %}">
+                    <strong>{{ event.date|date:'d' }}</strong>
+                    <small>{{ event.date|date:'M'|upper }}</small>
+                </div>
+                <div>
+                    <h4>{{ event.title }}</h4>
+                    <p>{{ event.venue }}</p>
+                </div>
+            </div>
+            {% endfor %}
+            <a href="#events" class="board-link">See all events →</a>
+        </div>
+    </section>
+
+    <section class="quick-stats">
+        <div><strong>25+</strong><span>Events this year</span></div>
+        <div><strong>1,000+</strong><span>Student participants</span></div>
+        <div><strong>15+</strong><span>Active clubs</span></div>
+        <div><strong>10</strong><span>Event categories</span></div>
+    </section>
+
+    <section id="events" class="events-section">
+        <div class="section-title">
+            <div>
+                <span>WHAT'S ON</span>
+                <h2>Upcoming events</h2>
+            </div>
+            <p>Pick something you like. There is always something going on.</p>
+        </div>
+
+        <div class="filter-bar">
+            <button type="button" class="filter-btn active-filter" onclick="filterEvents('all', this)">All</button>
+            <button type="button" class="filter-btn" onclick="filterEvents('technical', this)">Technical</button>
+            <button type="button" class="filter-btn" onclick="filterEvents('cultural', this)">Cultural</button>
+            <button type="button" class="filter-btn" onclick="filterEvents('sports', this)">Sports</button>
+            <button type="button" class="filter-btn" onclick="filterEvents('academic', this)">Academic</button>
+        </div>
+
+        <div class="event-grid">
+            {% for event in events %}
+            <article class="event-card event-item" data-category="{{ event.category }}">
+                <div class="event-image {% if event.category == 'technical' %}code-image{% elif event.category == 'cultural' %}culture-image{% elif event.category == 'sports' %}sports-image{% else %}research-image{% endif %}">
+                    <span>{{ event.image_label }}</span>
+                </div>
+                <div class="event-content">
+                    <div class="event-top">
+                        <span class="category">{{ event.get_category_display }}</span>
+                        <span>{{ event.date|date:'M d' }}</span>
+                    </div>
+                    <h3>{{ event.title }}</h3>
+                    <p>{{ event.description }}</p>
+                    <div class="event-location">📍 {{ event.venue }}</div>
+                    <button type="button" class="register-link" onclick="selectEvent('{{ event.title|escapejs }}')">Register →</button>
+                </div>
+            </article>
+            {% empty %}
+            <p class="empty-state">No events available right now. Check back soon.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section id="about" class="about-section">
+        <div class="about-inner">
+            <div class="about-text">
+                <span class="section-label">ABOUT EVENTEASE</span>
+                <h2>College life is more than just classes.</h2>
+                <p>EventEase was created to make it easier for students to find out what is happening around their campus.</p>
+                <p>Instead of checking different WhatsApp groups, posters and club pages, students can find upcoming events in one place.</p>
+                <div class="about-list">
+                    <div><b>01</b> Discover events</div>
+                    <div><b>02</b> Register online</div>
+                    <div><b>03</b> Show up & participate</div>
+                </div>
+            </div>
+
+            <div class="about-note">
+                <span>EVENTEASE</span>
+                <div class="big-quote">"Don't just attend college. Be a part of it."</div>
+                <p>— The idea behind EventEase</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="register" class="register-section">
+        <div class="register-heading">
+            <span class="section-label">JOIN US</span>
+            <h2>Ready to participate?</h2>
+            <p>Choose an event and fill in your details.</p>
+        </div>
+
+        <div class="registration-box">
+            <div class="register-info">
+                <h3>One form. That's it.</h3>
+                <p>Register for your favourite event without going through a complicated process.</p>
+                <div class="register-points">
+                    <span>✓ Quick registration</span>
+                    <span>✓ Event confirmation</span>
+                    <span>✓ Student friendly</span>
+                </div>
+            </div>
+
+            <div class="form-container">
+                <form id="registrationForm" method="post" action="{% url 'home' %}">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="full_name" value="{{ form.full_name.value|default_if_none:'' }}" placeholder="Your name" required>
+                            <small id="nameError">{{ form.full_name.errors.0 }}</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="text" id="phone" name="phone" value="{{ form.phone.value|default_if_none:'' }}" placeholder="10-digit number" required>
+                            <small id="phoneError">{{ form.phone.errors.0 }}</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">College Email</label>
+                        <input type="email" id="email" name="email" value="{{ form.email.value|default_if_none:'' }}" placeholder="you@college.edu" required>
+                        <small id="emailError">{{ form.email.errors.0 }}</small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="department">Department</label>
+                            <select id="department" name="department" required>
+                                <option value="">Select department</option>
+                                <option value="CSD" {% if form.department.value == 'CSD' %}selected{% endif %}>Computer Science & Design</option>
+                                <option value="CSE" {% if form.department.value == 'CSE' %}selected{% endif %}>Computer Science</option>
+                                <option value="IT" {% if form.department.value == 'IT' %}selected{% endif %}>Information Technology</option>
+                                <option value="ECE" {% if form.department.value == 'ECE' %}selected{% endif %}>Electronics</option>
+                                <option value="ME" {% if form.department.value == 'ME' %}selected{% endif %}>Mechanical</option>
+                                <option value="CE" {% if form.department.value == 'CE' %}selected{% endif %}>Civil</option>
+                            </select>
+                            <small id="departmentError">{{ form.department.errors.0 }}</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="event">Event</label>
+                            <select id="event" name="event" required>
+                                <option value="">Choose an event</option>
+                                {% for event in events %}
+                                <option value="{{ event.title }}" {% if form.event.value == event.title %}selected{% endif %}>{{ event.title }}</option>
+                                {% endfor %}
+                            </select>
+                            <small id="eventError">{{ form.event.errors.0 }}</small>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terms" name="terms_accepted" {% if form.terms_accepted.value %}checked{% endif %} required>
+                        <label for="terms">I agree to the event terms and conditions.</label>
+                    </div>
+                    <small id="termsError">{{ form.terms_accepted.errors.0 }}</small>
+
+                    <button type="submit" class="submit-btn">Complete Registration</button>
+                    {% if messages %}
+                        <div id="successMessage" class="success-message">
+                            {% for message in messages %}{{ message }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="footer-inner">
+        <div>
+            <div class="footer-logo">Event<span>Ease</span></div>
+            <p>Making campus events easier to discover and easier to join.</p>
+        </div>
+        <div class="footer-links">
+            <a href="#home">Home</a>
+            <a href="#events">Events</a>
+            <a href="#about">About</a>
+            <a href="#register">Register</a>
+        </div>
+        <div>
+            <p>eventease@college.edu</p>
+            <p>+91 98765 43210</p>
+        </div>
+    </div>
+    <div class="footer-bottom">© 2026 EventEase · College Event Management System</div>
+</footer>
+
+<script src="{% static 'events/script.js' %}?v=2"></script>
+</body>
+</html>

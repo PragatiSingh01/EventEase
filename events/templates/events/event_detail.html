@@ -1,0 +1,39 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+<section class="dashboard-section detail-card">
+    <span class="section-label">EVENT DETAILS</span>
+    <h2>{{ event.title }}</h2>
+    <div class="detail-meta">
+        <span>{{ event.get_category_display }}</span>
+        <span>{{ event.date }}</span>
+        <span>{{ event.venue }}</span>
+    </div>
+    <p>{{ event.description }}</p>
+    <div class="detail-actions">
+        <a class="main-btn" href="{% url 'event_update' event.pk %}">Edit</a>
+        <a class="text-btn" href="{% url 'event_delete' event.pk %}">Delete</a>
+        <a class="text-btn" href="{% url 'registrations_list' %}">View all participants</a>
+    </div>
+</section>
+
+<section class="dashboard-section detail-card">
+    <span class="section-label">REGISTERED PARTICIPANTS</span>
+    <h3>{{ registrations|length }} registered</h3>
+
+    {% if registrations %}
+        <ul class="participant-list">
+            {% for registration in registrations %}
+            <li>
+                <strong>{{ registration.full_name }}</strong>
+                <span>{{ registration.department }}</span>
+                <span>{{ registration.email }}</span>
+                <span>{{ registration.phone }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No participants registered yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

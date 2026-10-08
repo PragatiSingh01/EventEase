@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventEase Admin</title>
+    <link rel="stylesheet" href="{% static 'events/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+<header>
+    <nav class="navbar">
+        <div class="logo">Event<span>Ease</span></div>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'event_list' %}" class="active">Events</a></li>
+            <li><a href="{% url 'event_create' %}">Add Event</a></li>
+            <li><a href="{% url 'registrations_list' %}">Participants</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    {% if messages %}
+    <div class="message-box">
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>

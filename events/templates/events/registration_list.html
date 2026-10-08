@@ -1,0 +1,48 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+<section class="dashboard-section">
+    <div class="page-header">
+        <div>
+            <span class="section-label">PARTICIPANTS</span>
+            <h2>Registered participants</h2>
+        </div>
+        <a class="text-btn" href="{% url 'event_list' %}">Back to events</a>
+    </div>
+
+    {% if registrations %}
+    <div class="table-wrap">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Event</th>
+                    <th>Department</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registration in registrations %}
+                <tr>
+                    <td>{{ registration.full_name }}</td>
+                    <td>{{ registration.event.title }}</td>
+                    <td>{{ registration.department }}</td>
+                    <td>{{ registration.email }}</td>
+                    <td>{{ registration.phone }}</td>
+                    <td>
+                        <form method="post" action="{% url 'registration_delete' registration.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="small-delete-btn">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No registrations yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

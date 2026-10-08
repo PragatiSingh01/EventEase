@@ -1,0 +1,31 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Start EventEase backend",
+            "type": "shell",
+            "command": "${workspaceFolder}\\start_backend.bat",
+            "isBackground": true,
+            "problemMatcher": [
+                {
+                    "owner": "django",
+                    "pattern": {
+                        "regexp": "^$"
+                    },
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": "^Performing system checks\\.\\.\\.$",
+                        "endsPattern": "^Starting development server at "
+                    }
+                }
+            ],
+            "presentation": {
+                "reveal": "silent",
+                "panel": "dedicated"
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        }
+    ]
+}

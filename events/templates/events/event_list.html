@@ -1,0 +1,60 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+<section class="dashboard-section">
+    <div class="page-header">
+        <div>
+            <span class="section-label">MANAGE EVENTS</span>
+            <h2>All events</h2>
+        </div>
+        <a class="main-btn" href="{% url 'event_create' %}">+ Add Event</a>
+    </div>
+
+    <div class="summary-grid">
+        <div class="summary-card">
+            <span>Total Events</span>
+            <strong>{{ total_events }}</strong>
+        </div>
+        <div class="summary-card">
+            <span>Registrations</span>
+            <strong>{{ total_registrations }}</strong>
+        </div>
+        <div class="summary-card">
+            <span>Technical</span>
+            <strong>{{ category_breakdown.technical }}</strong>
+        </div>
+        <div class="summary-card">
+            <span>Cultural</span>
+            <strong>{{ category_breakdown.cultural }}</strong>
+        </div>
+    </div>
+
+    <div class="filter-row">
+        <a href="{% url 'event_list' %}?category=all" class="filter-pill {% if selected_category == 'all' %}active{% endif %}">All</a>
+        <a href="{% url 'event_list' %}?category=technical" class="filter-pill {% if selected_category == 'technical' %}active{% endif %}">Technical</a>
+        <a href="{% url 'event_list' %}?category=cultural" class="filter-pill {% if selected_category == 'cultural' %}active{% endif %}">Cultural</a>
+        <a href="{% url 'event_list' %}?category=sports" class="filter-pill {% if selected_category == 'sports' %}active{% endif %}">Sports</a>
+        <a href="{% url 'event_list' %}?category=academic" class="filter-pill {% if selected_category == 'academic' %}active{% endif %}">Academic</a>
+    </div>
+
+    <div class="event-admin-grid">
+        {% for event in events %}
+        <article class="admin-card">
+            <div class="event-top">
+                <span class="category">{{ event.get_category_display }}</span>
+                <span>{{ event.date }}</span>
+            </div>
+            <h3>{{ event.title }}</h3>
+            <p>{{ event.venue }}</p>
+            <div class="admin-actions">
+                <a href="{% url 'event_detail' event.pk %}">View</a>
+                <a href="{% url 'event_update' event.pk %}">Edit</a>
+                <a href="{% url 'event_delete' event.pk %}" class="danger">Delete</a>
+            </div>
+        </article>
+        {% empty %}
+        <p>No events found.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
